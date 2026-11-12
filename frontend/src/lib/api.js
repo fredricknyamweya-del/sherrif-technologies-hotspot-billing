@@ -55,8 +55,23 @@ function getMockCollection(path) {
     { key: 'transactions', endings: ['/transactions', '/admin/transactions'] },
   ]
   return collections.find(({ endings }) =>
-    endings.some((ending) => normalizedPath.endsWith(ending)),
+    endings.some(
+      (ending) =>
+        normalizedPath.endsWith(ending) || normalizedPath.includes(`${ending}/`),
+    ),
   )?.key
+}
+
+function isMockCollectionPath(path, collection) {
+  const normalizedPath = path.replace(/\/+$/, '').toLowerCase()
+  const endings = {
+    clients: ['/clients', '/customers', '/admin/clients', '/admin/customers'],
+    logs: ['/logs', '/admin/logs', '/admin/system-logs'],
+    packages: ['/packages', '/admin/packages'],
+    tickets: ['/tickets', '/admin/tickets', '/admin/support/tickets'],
+    transactions: ['/transactions', '/admin/transactions'],
+  }[collection]
+  return endings.some((ending) => normalizedPath.endsWith(ending))
 }
 
 function filterMockRecords(records, searchParams) {
@@ -111,7 +126,7 @@ function mockRequest(path, method, body) {
   const records = mockStores[collection]
   const segments = normalizedPath.split('/').filter(Boolean)
   const lastSegment = segments.at(-1)
-  const isCollectionPath = !lastSegment || getMockCollection(`/${lastSegment}`) === collection
+  const isCollectionPath = isMockCollectionPath(url.pathname, collection)
 
   if (method === 'GET') {
     const filtered = filterMockRecords(records, url.searchParams)
@@ -153,8 +168,7 @@ export async function apiRequest(
   const requestHeaders = new Headers(headers)
   if (body !== undefined) requestHeaders.set('Content-Type', 'application/json')
   if (['POST', 'PATCH', 'DELETE'].includes(normalizedMethod)) {
-    const csrfToken = getCsrfToken()
-    if (csrfToken) requestHeaders.set('X-CSRF-TOKEN', csrfToken)
+    requestHeaders.set('X-CSRF-TOKEN', getCsrfToken())
   }
 
   let response

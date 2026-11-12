@@ -1,8 +1,14 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { apiRequest } from '@/lib/api'
 
 export function useFetch(path, options = {}, enabled = true) {
   const { method = 'GET', body, headers } = options
+  const bodyRef = useRef(body)
+  const headersRef = useRef(headers)
+  bodyRef.current = body
+  headersRef.current = headers
+  const bodyKey = JSON.stringify(body ?? null)
+  const headersKey = JSON.stringify(headers ?? null)
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(Boolean(enabled))
   const [error, setError] = useState(null)
@@ -23,8 +29,8 @@ export function useFetch(path, options = {}, enabled = true) {
     setError(null)
     apiRequest(path, {
       method,
-      body,
-      headers,
+      body: bodyRef.current,
+      headers: headersRef.current,
       signal: controller.signal,
     })
       .then((result) => {
@@ -38,7 +44,7 @@ export function useFetch(path, options = {}, enabled = true) {
       })
 
     return () => controller.abort()
-  }, [path, method, body, headers, enabled, requestNumber])
+  }, [path, method, bodyKey, headersKey, enabled, requestNumber])
 
   return { data, loading, error, refetch }
 }
