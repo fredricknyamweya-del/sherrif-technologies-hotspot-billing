@@ -211,7 +211,7 @@ The full request and response contracts live in `docs/api-contract.md`.
 
 ## Hosting
 
-- Frontend: Render static site (or Netlify/Vercel), built with `npm run build`
+- Frontend: Render static site built with `npm run build`
 - Backend: Render web service or VPS, started with `gunicorn wsgi:app --bind 0.0.0.0:$PORT`
 - Database: managed PostgreSQL or a VPS-hosted instance
 
