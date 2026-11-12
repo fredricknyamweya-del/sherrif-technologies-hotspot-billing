@@ -203,6 +203,10 @@ function mockRequest(path, method, body) {
       username: body.username,
       role: 'admin',
     }
+    mockAdminCredential = {
+      username: body.username,
+      password: body.password,
+    }
     return clone({
       message: 'Administrator account created. Sign in to continue.',
       user: mockAdminAccount,
@@ -212,8 +216,15 @@ function mockRequest(path, method, body) {
     if (!body?.username || !body?.password) {
       throw new ApiError('Enter your username and password.', 422)
     }
+    if (
+      !mockAdminAccount ||
+      body.username !== mockAdminCredential?.username ||
+      body.password !== mockAdminCredential?.password
+    ) {
+      throw new ApiError('The username or password is incorrect.', 401)
+    }
     mockAuthenticated = true
-    mockUser = { id: 'admin-mock', name: body.username, role: 'admin' }
+    mockUser = { ...mockAdminAccount }
     return clone({ user: mockUser })
   }
   if (normalizedPath.endsWith('/admin/auth/logout') && method === 'POST') {
@@ -266,6 +277,7 @@ function mockRequest(path, method, body) {
 }
 
 let mockAdminAccount = null
+let mockAdminCredential = null
 
 export async function apiRequest(
   path,

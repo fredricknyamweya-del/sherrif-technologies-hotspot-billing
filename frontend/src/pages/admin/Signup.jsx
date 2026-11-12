@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router'
 import { UserRoundPlus } from 'lucide-react'
 import Logo from '@/components/brand/Logo'
+import ThemeToggle from '@/components/brand/ThemeToggle'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function Signup() {
@@ -41,6 +42,7 @@ export default function Signup() {
 
   return (
     <main className="admin-login-page">
+      <ThemeToggle className="admin-auth-theme-toggle" />
       <section className="admin-login-card" aria-labelledby="admin-signup-title">
         <Link
           className="admin-login-brand"

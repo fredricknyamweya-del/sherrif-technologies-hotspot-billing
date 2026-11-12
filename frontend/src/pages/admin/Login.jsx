@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router'
 import { Eye, EyeOff, LockKeyhole, Wifi } from 'lucide-react'
 import Logo from '@/components/brand/Logo'
+import ThemeToggle from '@/components/brand/ThemeToggle'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function Login() {
@@ -33,6 +34,7 @@ export default function Login() {
 
   return (
     <main className="admin-login-page">
+      <ThemeToggle className="admin-auth-theme-toggle" />
       <section className="admin-login-card" aria-labelledby="admin-login-title">
         <Link
           className="admin-login-brand"
@@ -101,8 +103,12 @@ export default function Login() {
             </p>
           )}
 
-          <button className="admin-login-submit" type="submit">
-            Sign in to dashboard
+          <button
+            className="admin-login-submit"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Signing in…' : 'Sign in to dashboard'}
           </button>
         </form>
 

@@ -1832,6 +1832,20 @@ textarea:focus-visible {
     padding: 0 1rem;
   }
 
+  .customer-header .customer-theme-toggle {
+    width: 44px;
+    padding: 0;
+  }
+
+  .customer-header .customer-theme-toggle span {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
   .customer-nav {
     display: none;
   }
@@ -2067,7 +2081,7 @@ textarea:focus-visible {
 
 .admin-nav-link {
   display: flex;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   gap: 0.7rem;
   margin: 0.12rem 0;
@@ -2171,8 +2185,8 @@ textarea:focus-visible {
 .admin-icon-button {
   position: relative;
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex: 0 0 auto;
   place-items: center;
   border: 1px solid transparent;
@@ -2563,6 +2577,7 @@ textarea:focus-visible {
 }
 
 .admin-login-page {
+  position: relative;
   display: grid;
   min-height: 100vh;
   place-items: center;
@@ -2574,6 +2589,13 @@ textarea:focus-visible {
       transparent 30rem
     ),
     var(--color-background);
+}
+
+.admin-auth-theme-toggle {
+  position: fixed;
+  z-index: 50;
+  top: 1rem;
+  right: 1rem;
 }
 
 .admin-login-card {
