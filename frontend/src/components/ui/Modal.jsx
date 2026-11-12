@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 
@@ -12,8 +12,9 @@ export default function Modal({
   size = 'md',
 }) {
   const dialogRef = useRef(null)
-  const titleId = 'ui-modal-title'
-  const descriptionId = description ? 'ui-modal-description' : undefined
+  const generatedId = useId()
+  const titleId = `${generatedId}-title`
+  const descriptionId = description ? `${generatedId}-description` : undefined
 
   useEffect(() => {
     const dialog = dialogRef.current

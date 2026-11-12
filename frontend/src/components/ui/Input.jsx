@@ -5,6 +5,7 @@ const Input = forwardRef(function Input(
     id,
     invalid = false,
     className = '',
+    inputClassName = '',
     leading,
     trailing,
     ...props
@@ -19,7 +20,7 @@ const Input = forwardRef(function Input(
         ref={ref}
         id={id}
         aria-invalid={invalid || undefined}
-        className={`ui-input${leading ? ' has-leading' : ''}${trailing ? ' has-trailing' : ''}`}
+        className={`ui-input${leading ? ' has-leading' : ''}${trailing ? ' has-trailing' : ''} ${inputClassName}`.trim()}
       />
       {trailing && <span className="ui-input-trailing">{trailing}</span>}
     </div>
