@@ -1,0 +1,64 @@
+# ===== Secrets and environment files =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ===== Node / Frontend (npm only) =====
+node_modules/
+frontend/dist/
+frontend/build/
+.vite/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.eslintcache
+
+# Enforce npm: never commit other package managers' lockfiles
+pnpm-lock.yaml
+pnpm-workspace.yaml
+yarn.lock
+bun.lockb
+.mise.toml
+
+# Figma Make export leftovers
+.figma/
+
+# ===== Python / Backend =====
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+instance/
+*.sqlite3
+*.db
+
+# ===== Logs and runtime =====
+*.log
+logs/
+tmp/
+*.pid
+
+# ===== Uploads and exports generated at runtime =====
+backend/exports/
+backend/uploads/
+
+# ===== Editors and OS =====
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
