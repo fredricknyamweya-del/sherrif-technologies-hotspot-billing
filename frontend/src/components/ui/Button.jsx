@@ -1,4 +1,5 @@
 import { LoaderCircle } from 'lucide-react'
+import { Link } from 'react-router'
 
 const variants = {
   primary: 'ui-button-primary',
@@ -22,19 +23,23 @@ export default function Button({
   disabled = false,
   className = '',
   type = 'button',
+  as,
+  to,
   ...props
 }) {
+  const Component = as || (to ? Link : 'button')
   return (
-    <button
+    <Component
       {...props}
-      type={type}
-      disabled={disabled || loading}
+      {...(Component === 'button'
+        ? { type, disabled: disabled || loading }
+        : { to, 'aria-disabled': disabled || loading || undefined })}
       className={`ui-button ${variants[variant] || variants.primary} ${sizes[size] ?? ''} ${className}`.trim()}
     >
       {loading && (
         <LoaderCircle className="ui-spin" size={17} aria-hidden="true" />
       )}
       {children}
-    </button>
+    </Component>
   )
 }
