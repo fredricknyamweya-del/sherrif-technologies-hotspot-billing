@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { ArrowLeft, ArrowRight, KeyRound, Smartphone, Wifi } from 'lucide-react'
 import { Link } from 'react-router'
 import Button from '@/components/ui/Button'
-import ErrorState from '@/components/ui/ErrorState'
 import Field from '@/components/ui/Field'
 import Input from '@/components/ui/Input'
 import { formatPhoneNumber, isValidKenyanPhone } from '@/lib/format'
@@ -107,7 +106,6 @@ export default function Reconnect() {
       <p className="portal-footnote">
         Lost your payment code? <Link to="/customer-care">Contact customer care</Link>.
       </p>
-      {requestError && <div className="sr-only"><ErrorState title="Reconnect failed" message={requestError} /></div>}
     </div>
   )
 }
