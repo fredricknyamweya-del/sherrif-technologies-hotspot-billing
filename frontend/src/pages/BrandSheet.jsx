@@ -15,7 +15,7 @@ export default function BrandSheet() {
       </header>
 
       <section className="brand-hero" aria-labelledby="brand-title">
-        <span className="eyebrow">Sikazwe Technologies · Connected</span>
+        <span className="eyebrow">Sherrif Technologies · Connected</span>
         <h1 id="brand-title">A better connection starts here.</h1>
         <p>Fast, reliable Wi-Fi for the moments that matter.</p>
         <button className="brand-cta" type="button">

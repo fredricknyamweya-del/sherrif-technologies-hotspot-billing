@@ -40,7 +40,7 @@ export default function Home() {
         ) : announcement ? (
           <span><strong>{announcement.title}:</strong> {announcement.message}</span>
         ) : (
-          <span>Welcome to Sikazwe Technologies Wi-Fi.</span>
+          <span>Welcome to Sherrif Technologies Wi-Fi.</span>
         )}
       </section>
 

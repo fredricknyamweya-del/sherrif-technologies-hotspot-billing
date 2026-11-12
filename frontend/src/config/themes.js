@@ -6,7 +6,7 @@ export const THEME_STORAGE_KEYS = {
 }
 
 export const PRIMARY_COLOR_SWATCHES = [
-  { name: 'Sikazwe Green', value: DEFAULT_PRIMARY_COLOR },
+  { name: 'Sherrif Green', value: DEFAULT_PRIMARY_COLOR },
   { name: 'Ocean Blue', value: '#2878B8' },
   { name: 'Royal Purple', value: '#7952B3' },
   { name: 'Sunset Orange', value: '#D97736' },

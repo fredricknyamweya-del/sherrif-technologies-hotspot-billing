@@ -14,7 +14,7 @@ export default function CustomerShell() {
   return (
     <div className="customer-app">
       <header className="customer-header">
-        <Link className="customer-brand-link" to="/" aria-label="Sikazwe Technologies home">
+        <Link className="customer-brand-link" to="/" aria-label="Sherrif Technologies home">
           <Logo size="sm" />
         </Link>
         <nav className="customer-nav" aria-label="Main navigation">
@@ -40,7 +40,7 @@ export default function CustomerShell() {
       </div>
 
       <footer className="customer-footer">
-        <span>© {new Date().getFullYear()} Sikazwe Technologies</span>
+        <span>© {new Date().getFullYear()} Sherrif Technologies</span>
         <span>Reliable Wi-Fi, made simple.</span>
         <a href="tel:0719221177">Customer care: 0719221177</a>
       </footer>

@@ -7,7 +7,7 @@ export default function Logo({ size = 'md', showTagline = false, className = '' 
     <div className={`brand-lockup ${className}`.trim()}>
       <LogoMark size={markSize} />
       <span className="brand-copy">
-        <span className="brand-name">Sikazwe Technologies</span>
+        <span className="brand-name">Sherrif Technologies</span>
         {showTagline && <span className="brand-tagline">Wi-Fi, made simple.</span>}
       </span>
     </div>

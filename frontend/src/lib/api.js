@@ -106,7 +106,7 @@ function mockRequest(path, method, body) {
     return [
       {
         id: 'ANN-001',
-        title: 'Welcome to Sikazwe Wi-Fi',
+        title: 'Welcome to Sherrif Technologies Wi-Fi',
         message: 'Fast, reliable internet is just a few taps away.',
         createdAt: '2026-11-12T08:00:00Z',
       },
