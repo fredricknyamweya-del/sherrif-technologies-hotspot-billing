@@ -1,4 +1,20 @@
+import mockClients from '@/data/mock/clients'
+import mockLogs from '@/data/mock/logs'
+import mockPackages from '@/data/mock/packages'
+import mockTickets from '@/data/mock/tickets'
+import mockTransactions from '@/data/mock/transactions'
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
+let mockAuthenticated = false
+let mockUser = null
+const mockStores = {
+  clients: [...mockClients],
+  logs: [...mockLogs],
+  packages: [...mockPackages],
+  tickets: [...mockTickets],
+  transactions: [...mockTransactions],
+}
 
 function getCsrfToken() {
   const metaToken = document.querySelector('meta[name="csrf-token"]')?.content
@@ -25,8 +41,115 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiRequest(path, { method = 'GET', body, headers = {} } = {}) {
+function clone(value) {
+  return value == null ? value : JSON.parse(JSON.stringify(value))
+}
+
+function getMockCollection(path) {
+  const normalizedPath = path.split('?')[0].replace(/\/+$/, '').toLowerCase()
+  const collections = [
+    { key: 'clients', endings: ['/clients', '/customers', '/admin/clients', '/admin/customers'] },
+    { key: 'logs', endings: ['/logs', '/admin/logs', '/admin/system-logs'] },
+    { key: 'packages', endings: ['/packages', '/admin/packages'] },
+    { key: 'tickets', endings: ['/tickets', '/admin/tickets', '/admin/support/tickets'] },
+    { key: 'transactions', endings: ['/transactions', '/admin/transactions'] },
+  ]
+  return collections.find(({ endings }) =>
+    endings.some((ending) => normalizedPath.endsWith(ending)),
+  )?.key
+}
+
+function filterMockRecords(records, searchParams) {
+  let filtered = records
+  const search = searchParams.get('search')?.toLowerCase()
+  if (search) {
+    filtered = filtered.filter((record) =>
+      Object.values(record).some((value) =>
+        String(value).toLowerCase().includes(search),
+      ),
+    )
+  }
+  const status = searchParams.get('status')
+  if (status) {
+    filtered = filtered.filter(
+      (record) => String(record.status).toLowerCase() === status.toLowerCase(),
+    )
+  }
+  return filtered
+}
+
+function mockRequest(path, method, body) {
+  const url = new URL(path, 'http://mock.local')
+  const normalizedPath = url.pathname.replace(/\/+$/, '').toLowerCase()
+
+  if (normalizedPath.endsWith('/admin/auth/me')) {
+    if (!mockAuthenticated) throw new ApiError('Authentication required.', 401)
+    return clone({ user: mockUser })
+  }
+  if (normalizedPath.endsWith('/admin/auth/login') && method === 'POST') {
+    if (!body?.username || !body?.password) {
+      throw new ApiError('Enter your username and password.', 422)
+    }
+    mockAuthenticated = true
+    mockUser = { id: 'admin-mock', name: body.username, role: 'admin' }
+    return clone({ user: mockUser })
+  }
+  if (normalizedPath.endsWith('/admin/auth/logout') && method === 'POST') {
+    mockAuthenticated = false
+    mockUser = null
+    return { success: true }
+  }
+  if (normalizedPath.endsWith('/admin/settings/appearance') && method === 'PATCH') {
+    return clone(body)
+  }
+
+  const collection = getMockCollection(url.pathname)
+  if (!collection) {
+    throw new ApiError(`No mock response is configured for ${method} ${url.pathname}.`, 404)
+  }
+
+  const records = mockStores[collection]
+  const segments = normalizedPath.split('/').filter(Boolean)
+  const lastSegment = segments.at(-1)
+  const isCollectionPath = !lastSegment || getMockCollection(`/${lastSegment}`) === collection
+
+  if (method === 'GET') {
+    const filtered = filterMockRecords(records, url.searchParams)
+    if (isCollectionPath) return clone(filtered)
+    const record = records.find((item) => String(item.id) === lastSegment)
+    if (!record) throw new ApiError('Record not found.', 404)
+    return clone(record)
+  }
+
+  if (method === 'POST' && isCollectionPath) {
+    const record = { ...body, id: body?.id || `${collection.slice(0, -1)}-${Date.now()}` }
+    records.unshift(record)
+    return clone(record)
+  }
+
+  const recordId = isCollectionPath ? null : lastSegment
+  const recordIndex = records.findIndex((item) => String(item.id) === recordId)
+  if (recordIndex < 0) throw new ApiError('Record not found.', 404)
+
+  if (method === 'PATCH') {
+    records[recordIndex] = { ...records[recordIndex], ...body }
+    return clone(records[recordIndex])
+  }
+  if (method === 'DELETE') {
+    const [removed] = records.splice(recordIndex, 1)
+    return clone(removed)
+  }
+
+  throw new ApiError(`Mock method ${method} is not supported for ${url.pathname}.`, 405)
+}
+
+export async function apiRequest(
+  path,
+  { method = 'GET', body, headers = {}, signal } = {},
+) {
   const normalizedMethod = method.toUpperCase()
+  if (USE_MOCK) return mockRequest(path, normalizedMethod, body)
+
   const requestHeaders = new Headers(headers)
   if (body !== undefined) requestHeaders.set('Content-Type', 'application/json')
   if (['POST', 'PATCH', 'DELETE'].includes(normalizedMethod)) {
@@ -41,6 +164,7 @@ export async function apiRequest(path, { method = 'GET', body, headers = {} } = 
       credentials: 'include',
       headers: requestHeaders,
       body: body === undefined ? undefined : JSON.stringify(body),
+      signal,
     })
   } catch (error) {
     throw new ApiError(
@@ -50,9 +174,15 @@ export async function apiRequest(path, { method = 'GET', body, headers = {} } = 
   }
 
   const contentType = response.headers.get('content-type') || ''
-  const data = contentType.includes('application/json')
-    ? await response.json()
-    : await response.text()
+  const responseText = await response.text()
+  let data = responseText
+  if (contentType.includes('application/json') && responseText) {
+    try {
+      data = JSON.parse(responseText)
+    } catch {
+      throw new ApiError('The server returned an invalid JSON response.', response.status)
+    }
+  }
 
   if (!response.ok) {
     const message =
@@ -66,9 +196,6 @@ export async function apiRequest(path, { method = 'GET', body, headers = {} } = 
 }
 
 export async function updateAppearance(settings) {
-  if (import.meta.env.VITE_USE_MOCK === 'true') {
-    return { ...settings }
-  }
   return apiRequest('/admin/settings/appearance', {
     method: 'PATCH',
     body: settings,
