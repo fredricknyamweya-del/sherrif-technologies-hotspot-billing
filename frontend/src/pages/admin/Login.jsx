@@ -112,10 +112,10 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="admin-signup-prompt">
-          Need an administrator account?{' '}
-          <Link to="/admin/signup">Sign up</Link>
-        </p>
+        <p className="admin-signup-prompt">Need an administrator account?</p>
+        <Link className="admin-signup-button" to="/admin/signup">
+          Create admin account
+        </Link>
 
         <div className="admin-login-footer">
           <span>

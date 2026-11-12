@@ -2735,20 +2735,40 @@ textarea:focus-visible {
 }
 
 .admin-signup-prompt {
-  margin: 1rem 0 0;
+  margin: 1rem 0 0.6rem;
   color: var(--color-text-muted);
   font-size: 0.75rem;
   text-align: center;
 }
 
-.admin-signup-prompt a {
+.admin-signup-button {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 0.6rem;
   color: var(--color-primary-strong);
+  background: var(--color-surface);
+  font-size: 0.8rem;
   font-weight: 700;
   text-decoration: none;
 }
 
-.admin-signup-prompt a:hover {
-  text-decoration: underline;
+.admin-signup-button:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.admin-login-submit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.admin-signup-button a {
+  color: var(--color-primary-strong);
+  font-weight: 700;
+  text-decoration: none;
 }
 
 .admin-login-footer {
