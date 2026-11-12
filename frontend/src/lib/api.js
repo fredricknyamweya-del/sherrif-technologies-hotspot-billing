@@ -21,15 +21,15 @@ function getCsrfToken() {
   const metaToken = document.querySelector('meta[name="csrf-token"]')?.content
   if (metaToken) return metaToken
 
-  const cookie = document.cookie
-    .split('; ')
-    .find((part) => part.startsWith('XSRF-TOKEN='))
-  if (!cookie) return ''
+  const token = document.cookie.match(
+    /(?:^|;\s*)(?:csrf_access_token|XSRF-TOKEN)=([^;]*)/,
+  )?.[1]
+  if (!token) return ''
 
   try {
-    return decodeURIComponent(cookie.slice('XSRF-TOKEN='.length))
+    return decodeURIComponent(token)
   } catch {
-    return cookie.slice('XSRF-TOKEN='.length)
+    return token
   }
 }
 
@@ -190,6 +190,24 @@ function mockRequest(path, method, body) {
     if (!mockAuthenticated) throw new ApiError('Authentication required.', 401)
     return clone({ user: mockUser })
   }
+  if (normalizedPath.endsWith('/admin/auth/signup') && method === 'POST') {
+    if (mockAdminAccount) {
+      throw new ApiError('An administrator account has already been created.', 409)
+    }
+    if (!body?.name || !body?.username || !body?.password) {
+      throw new ApiError('Complete all required fields.', 422)
+    }
+    mockAdminAccount = {
+      id: 'admin-mock',
+      name: body.name,
+      username: body.username,
+      role: 'admin',
+    }
+    return clone({
+      message: 'Administrator account created. Sign in to continue.',
+      user: mockAdminAccount,
+    })
+  }
   if (normalizedPath.endsWith('/admin/auth/login') && method === 'POST') {
     if (!body?.username || !body?.password) {
       throw new ApiError('Enter your username and password.', 422)
@@ -246,6 +264,8 @@ function mockRequest(path, method, body) {
 
   throw new ApiError(`Mock method ${method} is not supported for ${url.pathname}.`, 405)
 }
+
+let mockAdminAccount = null
 
 export async function apiRequest(
   path,

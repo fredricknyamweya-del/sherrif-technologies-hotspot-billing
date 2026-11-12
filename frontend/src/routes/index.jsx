@@ -4,6 +4,7 @@ import AdminShell from '@/layouts/AdminShell'
 import AdminRouteGuard from '@/components/admin/AdminRouteGuard'
 import { AdminAuthProvider } from '@/hooks/useAuth'
 import Login from '@/pages/admin/Login'
+import Signup from '@/pages/admin/Signup'
 import Dashboard from '@/pages/admin/Dashboard'
 import CustomerCare from '@/pages/customer/CustomerCare'
 import Home from '@/pages/customer/Home'
@@ -19,6 +20,7 @@ function AdminRoutes() {
     <AdminAuthProvider>
       <Routes>
         <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
         <Route element={<AdminRouteGuard />}>
           <Route element={<AdminShell />}>
             <Route index element={<Navigate to="dashboard" replace />} />

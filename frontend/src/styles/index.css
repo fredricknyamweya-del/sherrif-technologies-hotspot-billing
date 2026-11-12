@@ -1836,20 +1836,6 @@ textarea:focus-visible {
     display: none;
   }
 
-  .customer-header .customer-theme-toggle {
-    width: 44px;
-    padding: 0;
-  }
-
-  .customer-header .customer-theme-toggle span {
-    position: absolute;
-    overflow: hidden;
-    width: 1px;
-    height: 1px;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-  }
-
   .customer-main {
     width: min(100% - 1.25rem, 1120px);
     padding-top: 1rem;
@@ -2590,12 +2576,6 @@ textarea:focus-visible {
     var(--color-background);
 }
 
-.admin-login-theme-toggle {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-}
-
 .admin-login-card {
   width: min(100%, 440px);
   padding: 2rem;
@@ -2635,6 +2615,17 @@ textarea:focus-visible {
   color: var(--color-text-muted);
   font-size: 0.84rem;
   line-height: 1.55;
+}
+
+.admin-login-notice {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--color-success) 35%, var(--color-border));
+  border-radius: 0.6rem;
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 8%, var(--color-surface));
+  font-size: 0.76rem;
+  line-height: 1.45;
 }
 
 .admin-login-form {
@@ -2719,6 +2710,23 @@ textarea:focus-visible {
 
 .admin-login-submit:hover {
   filter: brightness(1.07);
+}
+
+.admin-signup-prompt {
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.admin-signup-prompt a {
+  color: var(--color-primary-strong);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-signup-prompt a:hover {
+  text-decoration: underline;
 }
 
 .admin-login-footer {

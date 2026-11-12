@@ -56,6 +56,22 @@ export function AdminAuthProvider({ children }) {
     }
   }, [])
 
+  const signup = useCallback(async (details) => {
+    setLoading(true)
+    setError(null)
+    try {
+      return await apiRequest('/admin/auth/signup', {
+        method: 'POST',
+        body: details,
+      })
+    } catch (requestError) {
+      setError(requestError)
+      throw requestError
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   const logout = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -71,8 +87,17 @@ export function AdminAuthProvider({ children }) {
   }, [])
 
   const value = useMemo(
-    () => ({ user, loading, error, isAuthenticated: Boolean(user), login, logout, refresh }),
-    [user, loading, error, login, logout, refresh],
+    () => ({
+      user,
+      loading,
+      error,
+      isAuthenticated: Boolean(user),
+      login,
+      signup,
+      logout,
+      refresh,
+    }),
+    [user, loading, error, login, signup, logout, refresh],
   )
 
   return createElement(AuthContext.Provider, { value }, children)

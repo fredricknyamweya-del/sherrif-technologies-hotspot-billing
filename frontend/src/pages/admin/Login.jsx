@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router'
 import { Eye, EyeOff, LockKeyhole, Wifi } from 'lucide-react'
 import Logo from '@/components/brand/Logo'
-import ThemeToggle from '@/components/brand/ThemeToggle'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function Login() {
@@ -34,7 +33,6 @@ export default function Login() {
 
   return (
     <main className="admin-login-page">
-      <ThemeToggle className="admin-login-theme-toggle" />
       <section className="admin-login-card" aria-labelledby="admin-login-title">
         <Link
           className="admin-login-brand"
@@ -52,6 +50,12 @@ export default function Login() {
         <p className="admin-login-description">
           Sign in to manage your Sherrif Technologies Wi-Fi network.
         </p>
+
+        {location.state?.notice && (
+          <p className="admin-login-notice" role="status">
+            {location.state.notice}
+          </p>
+        )}
 
         <form className="admin-login-form" onSubmit={handleSubmit}>
           <label htmlFor="admin-username">Username</label>
@@ -101,6 +105,11 @@ export default function Login() {
             Sign in to dashboard
           </button>
         </form>
+
+        <p className="admin-signup-prompt">
+          Need an administrator account?{' '}
+          <Link to="/admin/signup">Sign up</Link>
+        </p>
 
         <div className="admin-login-footer">
           <span>
