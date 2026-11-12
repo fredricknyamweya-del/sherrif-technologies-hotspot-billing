@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowRight, BadgeCheck, Clock3, Headphones, Wifi } from 'lucide-react'
 import { Link } from 'react-router'
 import LogoMark from '@/components/brand/LogoMark'
-import Button from '@/components/ui/Button'
+import PackageCatalog from '@/components/customer/PackageCatalog'
 import ErrorState from '@/components/ui/ErrorState'
 import LoadingState from '@/components/ui/LoadingState'
 import { apiRequest } from '@/lib/api'
@@ -45,17 +45,14 @@ export default function Home() {
       </section>
 
       <section className="portal-hero">
-        <div className="portal-hero-content">
+          <div className="portal-hero-content">
           <span className="eyebrow">Good Wi-Fi. Good to go.</span>
           <h1>Your next connection is just a tap away.</h1>
-          <p>Pick a package that works for you and get online in moments.</p>
+          <p>Choose from our available packages and get online in moments.</p>
           <div className="portal-actions">
-            <Button as={Link} to="/packages" className="portal-primary-link">
-              Browse packages <ArrowRight size={17} aria-hidden="true" />
-            </Button>
-            <Link className="portal-secondary-link" to="/voucher">
-              I have a voucher
-            </Link>
+              <Link className="portal-secondary-link" to="/voucher">
+                I have a voucher
+              </Link>
           </div>
           <div className="portal-trust">
             <span><Wifi size={16} aria-hidden="true" /> Fast and reliable</span>
@@ -67,6 +64,16 @@ export default function Home() {
           <div className="portal-orbit-ring ring-two" />
           <div className="portal-orbit-core"><LogoMark size={76} /></div>
         </div>
+      </section>
+
+      <section className="portal-package-section" aria-labelledby="home-packages-heading">
+        <div className="package-group-heading">
+          <div>
+            <h2 id="home-packages-heading">Available Wi-Fi packages</h2>
+            <p>All prices are in Kenyan shillings. Choose the access that fits your day.</p>
+          </div>
+        </div>
+        <PackageCatalog />
       </section>
 
       {error && (
