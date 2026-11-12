@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+  font-family: 'Inter', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --color-primary: #2e9e5b;
+  --color-primary-strong: #23804a;
+  --color-primary-soft: #e8f5ed;
+  --color-background: #f7f6f2;
+  --color-surface: #fffefa;
+  --color-surface-muted: #f0eee8;
+  --color-text: #202820;
+  --color-text-muted: #647064;
+  --color-border: #dedfd7;
+  --color-danger: #c2413b;
+  --color-warning: #a76a14;
+  --color-success: #24784a;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-primary-soft: #183d2a;
+  --color-background: #121713;
+  --color-surface: #1b221d;
+  --color-surface-muted: #242d26;
+  --color-text: #f1f5f0;
+  --color-text-muted: #a9b5aa;
+  --color-border: #37433a;
+  --color-danger: #ff827b;
+  --color-warning: #f0b857;
+  --color-success: #79d39b;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-strong: var(--color-primary-strong);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-foreground: var(--color-text);
+  --color-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--color-background);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.app-shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse at 12% 18%, rgb(46 158 91 / 9%), transparent 42%),
+    radial-gradient(ellipse at 88% 82%, rgb(46 158 91 / 6%), transparent 38%),
+    var(--color-background);
+}
+
+.app-shell h1 {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
