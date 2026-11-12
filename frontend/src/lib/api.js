@@ -15,6 +15,7 @@ const mockStores = {
   tickets: [...mockTickets],
   transactions: [...mockTransactions],
 }
+const mockPayments = new Map()
 
 function getCsrfToken() {
   const metaToken = document.querySelector('meta[name="csrf-token"]')?.content
@@ -96,6 +97,94 @@ function filterMockRecords(records, searchParams) {
 function mockRequest(path, method, body) {
   const url = new URL(path, 'http://mock.local')
   const normalizedPath = url.pathname.replace(/\/+$/, '').toLowerCase()
+
+  if (
+    method === 'GET' &&
+    (normalizedPath.endsWith('/portal/announcements') ||
+      normalizedPath.endsWith('/announcements'))
+  ) {
+    return [
+      {
+        id: 'ANN-001',
+        title: 'Welcome to Sikazwe Wi-Fi',
+        message: 'Fast, reliable internet is just a few taps away.',
+        createdAt: '2026-11-12T08:00:00Z',
+      },
+    ]
+  }
+  if (
+    method === 'POST' &&
+    (normalizedPath.endsWith('/portal/payments') ||
+      normalizedPath.endsWith('/payments/initiate'))
+  ) {
+    const id = `PAY-${Date.now()}`
+    const requestedStatus = ['failed', 'timeout'].includes(body?.mockStatus)
+      ? body.mockStatus
+      : 'pending'
+    mockPayments.set(id, {
+      id,
+      status: requestedStatus === 'pending' ? 'success' : requestedStatus,
+      phone: body?.phone || '',
+      packageId: body?.packageId || '',
+      amount: Number(body?.amount) || 0,
+      reference: `MP${String(Date.now()).slice(-8)}`,
+      createdAt: new Date().toISOString(),
+    })
+    return {
+      paymentId: id,
+      status: requestedStatus,
+      message: 'Payment request sent. Check your phone to complete payment.',
+    }
+  }
+  if (
+    method === 'GET' &&
+    (normalizedPath.includes('/portal/payments/') ||
+      normalizedPath.includes('/payments/'))
+  ) {
+    const paymentId = url.pathname.split('/').filter(Boolean).at(-1)
+    const payment = mockPayments.get(paymentId)
+    if (!payment) throw new ApiError('Payment could not be found.', 404)
+    return clone(payment)
+  }
+  if (
+    method === 'POST' &&
+    (normalizedPath.endsWith('/portal/reconnect') ||
+      normalizedPath.endsWith('/reconnect'))
+  ) {
+    if (!body?.code || !body?.phone) {
+      throw new ApiError('Enter your payment code and phone number.', 422)
+    }
+    return {
+      success: true,
+      message: 'Your connection is active again.',
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+    }
+  }
+  if (
+    method === 'POST' &&
+    (normalizedPath.endsWith('/portal/vouchers/redeem') ||
+      normalizedPath.endsWith('/vouchers/redeem'))
+  ) {
+    if (!/^VCH-[A-Z0-9]{8}$/.test(String(body?.code || '').toUpperCase())) {
+      throw new ApiError('Enter a voucher in the format VCH-XXXXXXXX.', 422)
+    }
+    return {
+      success: true,
+      message: 'Voucher accepted. You are connected.',
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    }
+  }
+  if (
+    method === 'POST' &&
+    (normalizedPath.endsWith('/portal/support') ||
+      normalizedPath.endsWith('/support/tickets'))
+  ) {
+    return {
+      id: `TKT-${Date.now()}`,
+      status: 'open',
+      message: 'Your support request has been received.',
+    }
+  }
 
   if (normalizedPath.endsWith('/admin/auth/me')) {
     if (!mockAuthenticated) throw new ApiError('Authentication required.', 401)
