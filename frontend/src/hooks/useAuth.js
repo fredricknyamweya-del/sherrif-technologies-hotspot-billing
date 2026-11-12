@@ -1,7 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
+import {
+  createContext,
+  createElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { ApiError, apiRequest } from '@/lib/api'
 
-export function useAuth() {
+const AuthContext = createContext(null)
+
+export function AdminAuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -60,5 +70,18 @@ export function useAuth() {
     }
   }, [])
 
-  return { user, loading, error, isAuthenticated: Boolean(user), login, logout, refresh }
+  const value = useMemo(
+    () => ({ user, loading, error, isAuthenticated: Boolean(user), login, logout, refresh }),
+    [user, loading, error, login, logout, refresh],
+  )
+
+  return createElement(AuthContext.Provider, { value }, children)
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error('useAuth must be used within an AdminAuthProvider.')
+  }
+  return context
 }
