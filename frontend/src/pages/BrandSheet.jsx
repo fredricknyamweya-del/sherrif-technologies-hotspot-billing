@@ -5,7 +5,7 @@ import { PRIMARY_COLOR_SWATCHES } from '@/config/themes'
 import { useTheme } from '@/hooks/useTheme'
 
 export default function BrandSheet() {
-  const { primaryColor, setPrimaryColor } = useTheme()
+  const { primaryColor, setPrimaryColor, appearanceError } = useTheme()
 
   return (
     <main className="brand-sheet">
@@ -31,6 +31,11 @@ export default function BrandSheet() {
           <span className="eyebrow">A familiar signal</span>
           <h2 id="palette-title">Colour with purpose</h2>
           <p>Choose an accent to preview how the brand adapts.</p>
+          {appearanceError && (
+            <p className="appearance-error" role="alert">
+              Colour updated for this session, but could not be saved: {appearanceError}
+            </p>
+          )}
         </div>
         <div className="swatch-list">
           {PRIMARY_COLOR_SWATCHES.map((swatch) => (
