@@ -92,7 +92,7 @@ export default function PackageCatalog() {
   }
 
   return (
-    <div className="package-grid" aria-label="Available Wi-Fi packages">
+    <div className="package-grid">
       {packages.map((item) => (
         <PackageCard item={item} key={item.id} />
       ))}
