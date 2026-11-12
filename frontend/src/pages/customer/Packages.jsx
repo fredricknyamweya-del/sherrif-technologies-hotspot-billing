@@ -1,4 +1,4 @@
-import PackageCatalog from '@/components/customer/PackageCatalog'
+import PackageCatalog from "@/components/customer/PackageCatalog";
 
 export default function Packages() {
   return (
@@ -10,5 +10,5 @@ export default function Packages() {
       </header>
       <PackageCatalog />
     </div>
-  )
+  );
 }
