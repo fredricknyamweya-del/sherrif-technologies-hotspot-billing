@@ -1,7 +1,6 @@
 import { Link, NavLink, Outlet } from 'react-router'
 import { Headphones, TicketCheck, Wifi, WifiOff } from 'lucide-react'
 import Logo from '@/components/brand/Logo'
-import ThemeToggle from '@/components/brand/ThemeToggle'
 
 const navigation = [
   { to: '/', label: 'Home', icon: Wifi, end: true },
@@ -32,7 +31,6 @@ export default function CustomerShell() {
             </NavLink>
           ))}
         </nav>
-        <ThemeToggle className="customer-theme-toggle" />
       </header>
 
       <div className="customer-main">

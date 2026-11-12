@@ -1832,20 +1832,6 @@ textarea:focus-visible {
     padding: 0 1rem;
   }
 
-  .customer-header .customer-theme-toggle {
-    width: 44px;
-    padding: 0;
-  }
-
-  .customer-header .customer-theme-toggle span {
-    position: absolute;
-    overflow: hidden;
-    width: 1px;
-    height: 1px;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-  }
-
   .customer-nav {
     display: none;
   }
@@ -2763,12 +2749,6 @@ textarea:focus-visible {
 .admin-login-submit:disabled {
   cursor: wait;
   opacity: 0.72;
-}
-
-.admin-signup-button a {
-  color: var(--color-primary-strong);
-  font-weight: 700;
-  text-decoration: none;
 }
 
 .admin-login-footer {
